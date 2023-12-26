@@ -1,0 +1,83 @@
+﻿@model PaintShopMVC.Models.Products.Paint
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="PaintEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="IsActive">
+                    <input asp-for="IsActive" />
+                    Aktywny
+                </label>
+                <label asp-for="IsPromoted">
+                    <input asp-for="IsPromoted" />
+                    Promowany
+                </label>
+                <label asp-for="IsAvailable">
+                    <input asp-for="IsAvailable" disabled />
+                    Dostępny
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Package" class="control-label"></label>
+                <select asp-for="PackageId" asp-items="ViewBag.PackageList" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Efficiency" class="control-label"></label>
+                <input asp-for="Efficiency" class="form-control" />
+                <span asp-validation-for="Efficiency" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Surfaces" class="control-label"></label>
+                <select name="selectedSurfaces" asp-items="ViewBag.SurfaceList" class="form-control" multiple></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <select name="selectedCategories" asp-items="ViewBag.CategoryList" class="form-control" multiple></select>
+            </div>
+            <div class="form-group" id="product">
+                <hr />
+                <label asp-for="Img" class="control-label"></label>
+                <input asp-for="Img" class="form-control" />
+                <span asp-validation-for="Img" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

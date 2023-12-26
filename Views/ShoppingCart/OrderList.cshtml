@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PaintShopMVC.Models.Orders.Order>
+
+@{
+    ViewData["Title"] = "Lista zamówień";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalOrderValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalCartValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delivery)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalOrderValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliveryCost)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalCartValue)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                @if ((item.IsPaid))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentDate)
+                    </td>
+                }
+                else
+                {
+                    <td>Nie opłacone</td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Delivery.Name)
+                </td>
+                <td>
+                    @if (!item.IsPaid)
+                    {
+                    <a class="btn btn-success" asp-action="CreatePayment" asp-route-id="@item.Id">Opłać</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                    }
+                    <a class="btn btn-secondary" asp-action="OrderDetails" asp-route-id="@item.Id">Zobacz dokument</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

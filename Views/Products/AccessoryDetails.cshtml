@@ -1,0 +1,42 @@
+﻿@model PaintShopMVC.Models.Products.Accessory
+
+@{
+   
+    ViewData["Title"] = Model.Name+ " Szczegóły";
+}
+
+<div class="card" style="width: 36rem;">
+    <img src="@Url.Content("~/IMG/"+Model.Img)" class="card-img-top" alt="@Model.Name">
+    <div class="card-body">
+        <h5 class="card-title">@Html.DisplayFor(model => model.Name)
+                @if (Model.IsPromoted)
+                {
+                    <span class="badge bg-success rounded-pill">Promocja</span>
+                }
+            </h5>
+        <p class="card-text">@Html.DisplayFor(model => model.Description)</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="badge bg-primary rounded-pill">@Html.DisplayNameFor(model => model.Price): @Html.DisplayFor(model => model.Price)</span> </li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Category): @Html.DisplayFor(model => model.Category.Name)</li>
+    </ul>
+    <div class="card-body">
+
+    </div>
+    <div class="card-body">
+    <a asp-action="Index">Lista produktów</a>
+    <a onclick="goBack()" class="btn btn-outline-secondary">Powrót</a>
+    </div>
+    <div class="card-body">
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>
+</div>
+
+@section Scripts{
+    <script>
+        
+    </script>
+}

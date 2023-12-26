@@ -1,0 +1,51 @@
+﻿@model PaintShopMVC.Models.Products.Paint
+
+@{
+
+    ViewData["Title"] = Model.Name + " Szczegóły";
+}
+
+<div class="card" style="width: 36rem;">
+    <img src="@Url.Content("~/IMG/"+Model.Img)" class="card-img-top" alt="@Model.Name">
+    <div class="card-body">
+        <h5 class="card-title">
+            @Html.DisplayFor(model => model.Name)
+            @if (Model.IsPromoted)
+            {
+                <span class="badge bg-success rounded-pill">Promocja</span>
+            }
+        </h5>
+        <p class="card-text">@Html.DisplayFor(model => model.Description)</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="badge bg-primary rounded-pill">@Html.DisplayNameFor(model => model.Price): @Html.DisplayFor(model => model.Price)</span> </li>
+        <li class="list-group-item">@Html.DisplayNameFor(model => model.Efficiency): @Html.DisplayFor(model => model.Efficiency) m2/l</li>
+        <li class="list-group-item">
+            @Html.DisplayNameFor(model => model.Categories):
+            <ul>
+                @foreach (var cat in Model.Categories)
+                {
+                    <li> @Html.DisplayFor(model => cat.Category.Name)</li>
+                }
+            </ul>
+        <li class="list-group-item">
+                @Html.DisplayNameFor(model => model.Surfaces):
+            <ul>
+                    @foreach (var surf in Model.Surfaces)
+                    {
+                    <li> @Html.DisplayFor(model => surf.Surface.Name)</li>
+                    }
+            </ul>
+
+    </ul>
+    <div class="card-body">
+        <a asp-action="Index" class="btn btn-outline-dark">Lista produktów</a>
+        <a onclick="goBack()" class="btn btn-outline-secondary">Powrót</a>
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="card-body">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Edytuj</a>
+        </div>
+    }
+</div>

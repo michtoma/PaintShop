@@ -1,0 +1,9 @@
+﻿@model int
+
+<div class="container-row">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">Poprawnie opłacono zamówienie!</h1>
+        Numer zamówienia : @Model.ToString()<br /><br />
+        <a class="btn btn-primary"asp-controller="Home" asp-action="Index">Powrót do strony głównej</a>
+    </div>
+</div>

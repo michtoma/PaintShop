@@ -1,0 +1,80 @@
+﻿@model PaintShopMVC.Models.Orders.Order
+
+@{
+    ViewData["Title"] = $"Dokument zakupu nr: {@Model.Id}/{@Model.PaymentDate.Year}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="card">
+    <div class="card-body mx-4">
+        <div class="container">
+            <p class="my-5 mx-5" style="font-size: 30px;">Dokument zakupu nr: @Model.Id / @Model.PaymentDate.Year</p>
+            <div class="row">
+                <ul class="list-unstyled">
+                    <li class="text-black">@Model.Address.FirstName @Model.Address.LastName</li>
+                    <li class="text-muted mt-1"><span class="text-black">@Model.Address.Street @Model.Address.HouseNumber / @Model.Address.ApartmentNumber</span> </li>
+                    <li class="text-muted mt-1"><span class="text-black">@Model.Address.PostalCode @Model.Address.City</span></li>
+                    <li class="text-black mt-1"><span class="text-black">Data sprzedaży:</span>@Model.PaymentDate</li>
+                </ul>
+                <hr style="border: 2px solid black;">
+                <div class="col-xl-12">
+                    <p >
+                        Produkty:
+                    </p>
+                </div>
+                @foreach(var item in Model.Items)
+                {
+                <div class="col-xl-6">
+                    <p>@item.ProductName</p>
+                </div>
+                <div class="col-xl-2">
+                        <p class ="float-end">cena: @item.Price.ToString("0.00") zł</p>
+                </div>
+                <div class="col-xl-2">
+                    <p>ilość: @item.Quantity</p>
+                </div>
+                <div class="col-xl-2">
+                    <p class="float-end">
+                        @item.TotalItemCost.ToString("0.00") zł
+                    </p>
+                </div>
+                }
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-xl-10">
+                    <p>Dostawa</p>
+                </div>
+                <div class="col-xl-2">
+                    <p class="float-end">
+                        @Model.DeliveryCost.ToString("0.00") zł
+                    </p>
+                </div>
+                <hr style="border: 2px solid black;">
+            </div>
+            <div class="row text-black">
+
+                <div class="col-xl-12">
+                    <p class="float-end fw-bold">
+                        Suma: @Model.TotalOrderValue.ToString("0.00") zł
+                    </p>
+                </div>
+                <hr style="border: 2px solid black;">
+            </div>
+            <div class="text-center" style="margin-top: 90px;">
+                @if (Model.IsPaid)
+                {
+                    <a asp-action="CreateOrderPdfDocument" asp-route-id="@Model.Id" class="btn btn-success">Pobierz dokument zakupu</a>
+                }
+                else
+                {
+                    <a asp-action="CreatePayment" asp-route-id="@Model.Id" class="btn btn-success">Opłać zamówienie</a>
+
+                }
+                <a asp-action="OrderList" class="btn btn-secondary">Wróć do listy</a>
+            </div>
+
+        </div>
+    </div>
+</div>

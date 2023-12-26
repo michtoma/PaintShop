@@ -1,0 +1,60 @@
+﻿@model PaintShopMVC.Models.Orders.Cart
+
+@{
+    ViewData["Title"] = "Potwierdzenie zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Produkt</th>
+                <th>ProduktId</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+                <th>Wartość</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Items)
+            {
+                double price = item.Quantity * item.Price;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Price) zł
+                    </td>
+                    <td>
+                        @price.ToString("0.00") zł
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-success">Suma</td>
+                <td class="text-success">@Model.TotalCartValue.ToString("0.00") zł</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div>
+    <a asp-action="CreateOrder" asp-route-cartId="@Model.Id" class="btn btn-success" >Zatwierdź zamówienie</a>
+    <a asp-action="Index" class="btn btn-secondary">Wróc do listy koszyków</a>
+</div>

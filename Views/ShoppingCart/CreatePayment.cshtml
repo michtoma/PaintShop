@@ -1,0 +1,129 @@
+﻿@model PaintShopMVC.ModelView.Payments
+
+@{
+    ViewData["Title"] = "Płatność";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form id="paymentForm" method="post">
+    <div class="form-group">
+        <label for="cardNumber">Card Number</label>
+        <input type="text" class="form-control" id="cardNumber" name="CardNumber" required>
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.CardNumber)</span>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="expirationMonth">Expiration Month</label>
+            <input type="text" class="form-control" id="expirationMonth" name="ExpirationMonth" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.ExpirationMonth)</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="expirationYear">Expiration Year</label>
+            <input type="text" class="form-control" id="expirationYear" name="ExpirationYear" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.ExpirationYear)</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" class="form-control" id="cvv" name="CVV" required>
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.CVV)</span>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="FirstName" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.FirstName)</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="LastName" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.LastName)</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="Email" required>
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.Email)</span>
+    </div>
+
+    <div class="form-group">
+        <label for="addressLine1">Address Line 1</label>
+        <input type="text" class="form-control" id="addressLine1" name="AddressLine1" required>
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.AddressLine1)</span>
+    </div>
+
+    <div class="form-group">
+        <label for="addressLine2">Address Line 2</label>
+        <input type="text" class="form-control" id="addressLine2" name="AddressLine2">
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" name="City" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.City)</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" class="form-control" id="postalCode" name="PostalCode" required>
+            <span class="text-danger">@Html.ValidationMessageFor(m => m.PostalCode)</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="country">Country</label>
+        <input type="text" class="form-control" id="country" name="Country" required>
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.Country)</span>
+    </div>
+
+    <input type="submit" value="Pay" class="btn btn-primary" id="payButton">
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('@ViewData["PublicKey"]');
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+
+    cardElement.mount('#card-element');
+
+    var cardHolderName = document.getElementById('card-holder-name');
+    var cardButton = document.getElementById('card-button');
+    var clientSecret = '@ViewData["ClientSecret"]';
+
+    cardButton.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: cardElement,
+                billing_details: {
+                    name: cardHolderName.value
+                }
+            }
+        }).then(function (result) {
+            if (result.error) {
+                // Error handling
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Payment success handling
+                if (result.paymentIntent.status === 'succeeded') {
+                    // Redirect or show success message
+                    window.location.href = '@Url.Action("OrderList", "ShoppingCart")';
+                }
+            }
+        });
+    });
+</script>
+
+
+
+
+
+

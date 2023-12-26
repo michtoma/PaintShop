@@ -1,0 +1,98 @@
+﻿@model PaintShopMVC.Models.Orders.Cart
+
+@{
+    ViewData["Title"] = "Szczegóły Zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsEditable)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.IsEditable)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd class="col-sm-4">
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalCartValue)
+        </dt>
+        <dd class="col-sm-4">
+            @Model.TotalCartValue.ToString("0.00") zł
+        </dd>
+    </dl>
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+
+                <th>Produkt</th>
+                <th>ProduktId</th>
+                <th>Ilość</th>
+                <th>Cena</th>
+                <th>Wartość</th>
+                <th>Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Items)
+            {
+                double price = item.Quantity * item.Price;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.ProductId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Price) zł
+                    </td>
+                    <td>
+                        @price.ToString("0.00") zł
+                    </td>
+                    <td>
+                        <a asp-controller="ShoppingCart" asp-action="Increase" asp-route-shoppingCartId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-square"></i>
+                        </a>
+                        <a asp-controller="ShoppingCart" asp-action="Decrease" asp-route-shoppingCartId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-outline-secondary">
+                            <i class="bi bi-dash-square"></i>
+                        </a>
+                        <a asp-controller="ShoppingCart" asp-action="Remove" asp-route-shoppingCartId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-outline-danger">
+                            <i class="bi bi-x-square"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-success">Suma</td>
+                <td class="text-success">@Model.TotalCartValue.ToString("0.00") zł</td>
+                <td><a asp-action="ConfirmCart" asp-route-id="@Model.Id" class="btn btn-success">Zamów</a></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

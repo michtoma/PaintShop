@@ -1,0 +1,191 @@
+﻿@using PaintShopMVC.Models.Enums;
+@model PaintShopMVC.ModelView.ProductViewModel
+
+@{
+    ViewData["Title"] = "Nowy Produkt";
+}
+
+<h1>Dodaj Produkt</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <span id="groupSpan">Wybierz grupę dla produktu, który chcesz dodać:</span>
+        <form enctype="multipart/form-data" asp-action="AddProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductCategoryToSelect" class="control-label"></label>
+                <select asp-for="ProductGroup" asp-items="Model.ProductCategoryToSelect" class="form-control" id="cat">
+                    <option value="" disabled selected>Wybierz</option>
+                </select>
+            </div>
+            <div class="form-group" id="product1" style="display:none;">
+                <hr />
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Podaj nazwę" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="product2" style="display:none;">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" type="number" class="form-control" placeholder="Podaj cenę" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="product3" style="display:none;">
+                <hr />
+                <label asp-for="PacagesSelected" class="control-label"></label>
+                <select asp-for="PacagesSelected" asp-items="Model.PacagesSelect" class="form-control">
+                    <option value="" disabled selected>Wybierz</option>
+                </select>
+                <span asp-validation-for="PacagesSelected" class="text-danger"></span>
+                <a class="btn btn-light" asp-action="AddPackage">Dodaj nowy</a>
+            </div>
+
+            <div class="form-group" id="productEfficiency" style="display:none;">
+                <label asp-for="Efficiency" class="control-label"></label>
+                <input asp-for="Efficiency" type="number" class="form-control" placeholder="Wpisz wydajność" />
+                <span asp-validation-for="Efficiency" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="productCategoryAccessory" style="display:none;">
+                <label asp-for="AccessoryCategorySelected" class="control-label"></label>
+                <select asp-for="AccessoryCategorySelected" asp-items="Model.AccessoryCategoriesSelect" class="form-control" multiple></select>
+                <span asp-validation-for="AccessoryCategorySelected" class="text-danger"></span>
+                <a class="btn btn-light" asp-action="AddAccessoryCategory">Dodaj nowy</a>
+
+            </div>
+
+            <div class="form-group" id="productSurface" style="display:none;">
+                <hr />
+                <label asp-for="SurfacesSelected" class="control-label"></label>
+                @foreach (var surface in Model.SurfacesSelect)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="SurfacesSelected" value="@surface.Value" @(Model.SurfacesSelected != null && Model.SurfacesSelected.Contains(int.Parse(surface.Value)) ? "checked" : "") />
+                            @surface.Text
+                        </label>
+                    </div>
+                }
+                <span asp-validation-for="SurfacesSelected" class="text-danger"></span>
+                <a class="btn btn-light" asp-action="AddSurface">Dodaj nowy</a>
+
+            </div>
+            <div class="form-group" id="productCategoryPAints" style="display:none;">
+                <hr />
+                <label class="control-label">Kategorie farb</label>
+                @foreach (var paintCategory in Model.PaintCategoriesSelect)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="PaintCategoriesSelected" value="@paintCategory.Value" @(Model.PaintCategoriesSelected != null && Model.PaintCategoriesSelected.Contains(int.Parse(paintCategory.Value)) ? "checked" : "") />
+                            @paintCategory.Text
+                        </label>
+                    </div>
+                }
+                <a class="btn btn-light" asp-action="AddPaintCategory">Dodaj nowy</a>
+
+                <span asp-validation-for="PaintCategoriesSelected" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="productCategorySolvent" style="display:none;">
+                <hr />
+                <label asp-for="SolventCategoriesSelected" class="control-label"></label>
+                <select asp-for="SolventCategoriesSelected" asp-items="Model.SolventCategoriesSelect" class="form-control"></select>
+                <span asp-validation-for="SolventCategoriesSelected" class="text-danger"></span>
+                <a class="btn btn-light" asp-action="AddSolventCategory">Dodaj nowy</a>
+
+            </div>
+
+            <div class="form-group" id="product5" style="display:none;">
+                <hr />
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" placeholder="Podaj opis" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="product" style="display:none;">
+                <hr />
+                <label asp-for="formFile" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="formFile" class="custom-file-input" id="ProdImg" />
+                    <label class="custom-file-label" for="ProdImg" hidden>Wybierz plik</label>
+                </div>
+                <span asp-validation-for="formFile" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary" id="product4" style="display:none;" />
+                <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+                <a onclick="goBack()" class="btn btn-outline-secondary">Powrót</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+</div>
+@section Scripts{
+
+    <script>
+        $(function () {
+            $('#cat').change(function () {
+                var val = $(this).val();
+                if (val == "1") {
+                    $('#groupSpan').hide();
+                    $('#product').show();
+                    $('#product1').show();
+                    $('#product2').show();
+                    $('#product3').show();
+                    $('#product4').show();
+                    $('#product5').show();
+                    $('#productEfficiency').show();
+                    $('#productSurface').show();
+                    $('#productCategoryPAints').show();
+                    $('#productCategorySolvent').hide();
+                    $('#productCategoryAccessory').hide();
+
+                }
+                else if (val == "2") {
+                    $('#groupSpan').hide();
+                    $('#product').show();
+                    $('#product1').show();
+                    $('#product2').show();
+                    $('#product3').show();
+                    $('#product4').show();
+                    $('#product5').show();
+                    $('#productEfficiency').hide();
+                    $('#productSurface').hide();
+                    $('#productCategoryPAints').hide();
+                    $('#productCategorySolvent').hide();
+                    $('#productCategoryAccessory').show();
+                }
+                else if (val == "3") {
+                    $('#groupSpan').hide();
+                    $('#product').show();
+                    $('#product1').show();
+                    $('#product2').show();
+                    $('#product3').show();
+                    $('#product4').show();
+                    $('#product5').show();
+                    $('#productEfficiency').hide();
+                    $('#productSurface').hide();
+                    $('#productCategoryPAints').hide();
+                    $('#productCategorySolvent').show();
+                    $('#productCategoryAccessory').hide();
+                }
+                else {
+                    $('#groupSpan').show();
+                    $('#product').hide();
+                    $('#product1').hide();
+                    $('#product2').hide();
+                    $('#product3').hide();
+                    $('#product4').hide();
+                    $('#product5').hide();
+                    $('#productEfficiency').hide();
+                    $('#productSurface').hide();
+                    $('#productCategoryPAints').hide();
+                    $('#productCategorySolvent').hide();
+                    $('#productCategoryAccessory').hide();
+                }
+            });
+        });
+
+    </script>
+}
