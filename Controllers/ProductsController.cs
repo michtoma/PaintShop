@@ -201,14 +201,14 @@ namespace PaintShopMVC.Controllers
                 return NotFound();
             }
 
-            var paint = await _repo.GetSolventAsync(id);
+            var solvent = await _repo.GetSolventAsync(id);
 
-            if (paint == null)
+            if (solvent == null)
             {
                 return NotFound();
             }
 
-            return View(paint);
+            return View(solvent);
         }
         public async Task<IActionResult> AccessoryDetails(int id)
         {

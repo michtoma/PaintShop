@@ -152,11 +152,11 @@ namespace PaintShopMVC.Repository
         }
         public async Task<IEnumerable<Accessory>> GetAccessoriesAsync()
         {
-            return await _context.Accessories.Include(a => a.Package).ToListAsync();
+            return await _context.Accessories.Include(a => a.Package).Include(a=>a.Category).ToListAsync();
         }
         public async Task<Accessory> GetAccessoryAsync(int? accessoryId)
         {
-            return await _context.Accessories.FirstOrDefaultAsync(a => a.Id == accessoryId);
+            return await _context.Accessories.Include(a => a.Category).FirstOrDefaultAsync(a => a.Id == accessoryId);
         }
         public async Task<Package> GetPacageAsync(int pacageId)
         {
